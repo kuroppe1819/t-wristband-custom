@@ -47,25 +47,30 @@ void showTime() {
 
   // show hour
   tft.setRotation(0);  // button exist down direction
+  tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
   if (datetime.hour < 10) {
     tft.drawString("0" + String(datetime.hour), 9, 16, 7);
   } else {
     tft.drawString(String(datetime.hour), 9, 16, 7);
   }
-  tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
 
   // show colon
   tft.setRotation(1);  // horizonal
+  if (datetime.second % 2) {
+    tft.setTextColor(TFT_BLACK, TFT_BLACK);
+  } else {
+    tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
+  }
   tft.drawString(":", tft.width() / 2 - 8, tft.height() / 2 - 24, 7);
 
   // show minute
   tft.setRotation(0);  // button exist down direction
+  tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
   if (datetime.minute < 10) {
     tft.drawString("0" + String(datetime.minute), 10, 90, 7);
   } else {
     tft.drawString(String(datetime.minute), 10, 90, 7);
   }
-  tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
 }
 
 void SleepMode() {
