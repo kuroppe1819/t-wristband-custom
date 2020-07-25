@@ -1,3 +1,4 @@
+#include "esp_adc_cal.h"
 #include <Arduino.h>
 #include <SPI.h>
 #include <TFT_eSPI.h> // Graphics and font library for ST7735 driver chip
@@ -8,6 +9,7 @@
 #include <qr_twitter.h>
 #include <twitter_logo.h>
 
+#define BATT_ADC_PIN 35
 #define I2C_SDA_PIN 21
 #define I2C_SCL_PIN 22
 #define TP_PIN_PIN 33
@@ -18,6 +20,7 @@ TFT_eSPI tft = TFT_eSPI(); // Invoke library, pins defined in User_Setup.h
 PCF8563_Class rtc;
 
 boolean pressed = false;
+int DEFAULT_VREF = 1100;
 uint8_t func_select = 0;
 uint8_t MAX_SELECT_MODE_COUNT = 3;
 RTC_Date datetime;
@@ -48,7 +51,14 @@ void setup()
     digitalWrite(TP_PWR_PIN, HIGH);
 }
 
-void showTime()
+String getVoltage()
+{
+    uint16_t v = analogRead(BATT_ADC_PIN);
+    float battery_voltage = ((float)v / 4095.0) * 2.0 * 3.3 * (DEFAULT_VREF / 1000.0);
+    return String(battery_voltage) + "V";
+}
+
+void showTimeAndBatteryCharge()
 {
     datetime = rtc.getDateTime();
 
@@ -78,6 +88,8 @@ void showTime()
     } else {
         tft.drawString(String(datetime.minute), 10, 90, 7);
     }
+
+    tft.drawString(getVoltage(), 10, 10);
 }
 
 void SleepMode()
@@ -106,7 +118,7 @@ void loop()
 
     switch (func_select) {
     case 0:
-        showTime();
+        showTimeAndBatteryCharge();
         break;
     case 1:
         tft.setRotation(2);
