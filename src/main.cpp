@@ -57,7 +57,7 @@ float getVoltage()
     return ((float)v / 4095.0) * 2.0 * 3.3 * (DEFAULT_VREF / 1000.0);
 }
 
-void showTimeAndBatteryCharge()
+void showTime(int pos_x, int pos_y)
 {
     datetime = rtc.getDateTime();
 
@@ -65,9 +65,9 @@ void showTimeAndBatteryCharge()
     tft.setRotation(0); // button exist down direction
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
     if (datetime.hour < 10) {
-        tft.drawString("0" + String(datetime.hour), 9, 24, 7);
+        tft.drawString("0" + String(datetime.hour), pos_x, pos_y, 7);
     } else {
-        tft.drawString(String(datetime.hour), 9, 24, 7);
+        tft.drawString(String(datetime.hour), pos_x, pos_y, 7);
     }
 
     // show colon
@@ -77,22 +77,23 @@ void showTimeAndBatteryCharge()
     } else {
         tft.setTextColor(TFT_GREEN, TFT_BLACK);
     }
-    tft.drawString(":", tft.width() / 2, tft.height() / 2 - 24, 7);
+    tft.drawString(":", tft.width() / 2, tft.height() / 2 - pos_y, 7);
 
     // show minute
     tft.setRotation(0); // button exist down direction
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
     if (datetime.minute < 10) {
-        tft.drawString("0" + String(datetime.minute), 9, 98, 7);
+        tft.drawString("0" + String(datetime.minute), pos_x, pos_y + 74, 7);
     } else {
-        tft.drawString(String(datetime.minute), 9, 98, 7);
+        tft.drawString(String(datetime.minute), pos_x, pos_y + 74, 7);
     }
+}
 
+void showBatteryCharge(int pos_x, int pos_y)
+{
     // draw battery charge
     int width = 16;
     int height = 8;
-    int pos_x = 9;
-    int pos_y = 4;
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
     tft.drawRect(pos_x, pos_y, width, height, TFT_GREEN);
     tft.fillRect(pos_x + width, pos_y + 2, 1, 4, TFT_GREEN);
@@ -137,7 +138,8 @@ void loop()
 
     switch (func_select) {
     case 0:
-        showTimeAndBatteryCharge();
+        showBatteryCharge(9, 4);
+        showTime(9, 24);
         break;
     case 1:
         tft.setRotation(2);
