@@ -51,11 +51,10 @@ void setup()
     digitalWrite(TP_PWR_PIN, HIGH);
 }
 
-String getVoltage()
+float getVoltage()
 {
     uint16_t v = analogRead(BATT_ADC_PIN);
-    float battery_voltage = ((float)v / 4095.0) * 2.0 * 3.3 * (DEFAULT_VREF / 1000.0);
-    return String(battery_voltage) + "V";
+    return ((float)v / 4095.0) * 2.0 * 3.3 * (DEFAULT_VREF / 1000.0);
 }
 
 void showTimeAndBatteryCharge()
@@ -89,7 +88,27 @@ void showTimeAndBatteryCharge()
         tft.drawString(String(datetime.minute), 9, 98, 7);
     }
 
-    tft.drawString(getVoltage(), 10, 10);
+    // draw battery charge
+    int width = 16;
+    int height = 8;
+    int pos_x = 9;
+    int pos_y = 4;
+    tft.setTextColor(TFT_GREEN, TFT_BLACK);
+    tft.drawRect(pos_x, pos_y, width, height, TFT_GREEN);
+    tft.fillRect(pos_x + width, pos_y + 2, 1, 4, TFT_GREEN);
+
+    float voltage = getVoltage();
+    if (voltage >= 4.0) {
+        tft.fillRect(pos_x, pos_y, width, height, TFT_GREEN);
+    } else if (4.0 > voltage && voltage >= 3.0) {
+        tft.fillRect(pos_x, pos_y, width - width / 4, height, TFT_GREEN);
+    } else if (3.0 > voltage && voltage >= 2.0) {
+        tft.fillRect(pos_x, pos_y, width - width / 4 * 2, height, TFT_GREEN);
+    } else if (2.0 > voltage && voltage >= 1.0) {
+        tft.fillRect(pos_x, pos_y, width - width / 4 * 3, height, TFT_GREEN);
+    } else {
+        tft.fillRect(pos_x, pos_y, 0, height, TFT_GREEN);
+    };
 }
 
 void SleepMode()
