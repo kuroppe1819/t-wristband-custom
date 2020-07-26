@@ -20,9 +20,10 @@ TFT_eSPI tft = TFT_eSPI(); // Invoke library, pins defined in User_Setup.h
 PCF8563_Class rtc;
 
 boolean pressed = false;
-int DEFAULT_VREF = 1100;
 uint8_t func_select = 0;
+int DEFAULT_VREF = 1100;
 uint8_t MAX_SELECT_MODE_COUNT = 3;
+String VERSION = "Ver1.0";
 RTC_Date datetime;
 
 void setupRTC()
@@ -139,6 +140,8 @@ void loop()
     switch (func_select) {
     case 0:
         showBatteryCharge(9, 4);
+        tft.setTextColor(TFT_GREEN, TFT_BLACK);
+        tft.drawString(VERSION, 40, 5);
         showTime(9, 24);
         break;
     case 1:
@@ -157,7 +160,7 @@ void loop()
         tft.setRotation(0);
         tft.setTextColor(TFT_GREEN, TFT_BLACK);
         tft.setTextDatum(MC_DATUM);
-        tft.drawString("Press again to wake up", tft.width() / 2,
+        tft.drawString("Sleep mode", tft.width() / 2,
             tft.height() / 2);
         delay(500);
         SleepMode();
