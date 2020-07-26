@@ -145,13 +145,13 @@ void loop()
         showTime(9, 24);
         break;
     case 1:
-        tft.setRotation(2);
+        tft.setRotation(0);
         tft.setBitmapColor(TFT_WHITE, TFT_WHITE);
         tft.pushImage(0, 0, 80, 80, twitter_logo);
         tft.pushImage(0, 80, 80, 80, qr_twitter);
         break;
     case 2:
-        tft.setRotation(2);
+        tft.setRotation(0);
         tft.setBitmapColor(TFT_WHITE, TFT_WHITE);
         tft.pushImage(0, 0, 80, 80, github_logo);
         tft.pushImage(0, 80, 80, 80, qr_github);
